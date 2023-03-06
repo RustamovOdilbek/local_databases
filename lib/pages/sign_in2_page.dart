@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:local_databases/model/user3.dart';
 import 'package:local_databases/pages/sign_up2_page.dart';
+
+import '../service/hide_service.dart';
+import '../service/log_service.dart';
 
 class SignIn2Page extends StatefulWidget {
   static final String id = "signin2_page";
@@ -9,6 +13,9 @@ class SignIn2Page extends StatefulWidget {
 }
 
 class _SignIn2PageState extends State<SignIn2Page> {
+  TextEditingController _email = new TextEditingController();
+  TextEditingController _password = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +75,7 @@ class _SignIn2PageState extends State<SignIn2Page> {
                         SizedBox(height: 10,),
 
                         TextField(
+                          controller: _email,
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           decoration: InputDecoration(
                             hintText: 'Email',
@@ -89,6 +97,7 @@ class _SignIn2PageState extends State<SignIn2Page> {
                         SizedBox(height: 10,),
 
                         TextField(
+                          controller: _password,
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           decoration: InputDecoration(
                             hintText: 'Password',
@@ -125,7 +134,15 @@ class _SignIn2PageState extends State<SignIn2Page> {
                              backgroundColor: Color(0xFF012B2C)
                          ),
                          onPressed: (){
+                           var email = _email.text.toString();
+                           var password = _password.text.toString();
+                           if(email.isNotEmpty && password.isNotEmpty){
+                             var user = User3(email, password);
 
+                             HiveService.storeUser3(user);
+                             var user3 = HiveService.loadUser3();
+                             LogService.i(user3.toJson().toString());
+                           }
                          },
                          child: Text("Sign In", style: TextStyle(color: Colors.white, fontSize: 16),)
                      ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:local_databases/model/user4.dart';
 import 'package:local_databases/pages/sign_in2_page.dart';
+
+import '../service/hide_service.dart';
+import '../service/log_service.dart';
 
 class SignUp2Page extends StatefulWidget {
   static final String id = "sigupn2_page";
@@ -9,6 +13,10 @@ class SignUp2Page extends StatefulWidget {
 }
 
 class _SignUp2PageState extends State<SignUp2Page> {
+  TextEditingController _email = new TextEditingController();
+  TextEditingController _number = new TextEditingController();
+  TextEditingController _address = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +62,7 @@ class _SignUp2PageState extends State<SignUp2Page> {
                         SizedBox(height: 10,),
 
                         TextField(
+                          controller: _email,
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           decoration: InputDecoration(
                             hintText: 'Email',
@@ -75,6 +84,7 @@ class _SignUp2PageState extends State<SignUp2Page> {
                         SizedBox(height: 10,),
 
                         TextField(
+                          controller: _number,
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           decoration: InputDecoration(
                             hintText: 'Number',
@@ -96,6 +106,7 @@ class _SignUp2PageState extends State<SignUp2Page> {
                         SizedBox(height: 10,),
 
                         TextField(
+                          controller: _address,
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           decoration: InputDecoration(
                             hintText: 'Address',
@@ -126,7 +137,16 @@ class _SignUp2PageState extends State<SignUp2Page> {
                               backgroundColor: Color(0xFF012B2C)
                           ),
                           onPressed: (){
+                            var email = _email.text.toString();
+                            var address = _address.text.toString();
+                            var number = _number.text.toString();
+                            if(email.isNotEmpty && address.isNotEmpty && number.isNotEmpty){
+                              var user = User4(email, number, address);
 
+                              HiveService.storeUser4(user);
+                              var user4 = HiveService.loadUser4();
+                              LogService.i(user4.toJson().toString());
+                            }
                           },
                           child: Text("Sign Up", style: TextStyle(color: Colors.white, fontSize: 16),)
                       ),
